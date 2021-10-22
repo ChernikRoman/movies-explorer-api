@@ -1,0 +1,30 @@
+{
+  "name": "movies-explorer-api",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js",
+    "dev": "nodemon"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Rmn17/movies-explorer-api.git"
+  },
+  "keywords": [],
+  "author": "Chernik Roman",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Rmn17/movies-explorer-api/issues"
+  },
+  "homepage": "https://github.com/Rmn17/movies-explorer-api#readme",
+  "dependencies": {
+    "express": "^4.17.1"
+  },
+  "devDependencies": {
+    "eslint": "^7.32.0",
+    "eslint-config-airbnb-base": "^14.2.1",
+    "eslint-plugin-import": "^2.25.2",
+    "nodemon": "^2.0.14"
+  }
+}
