@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 const express = require('express');
 const mongoose = require('mongoose');
 const cookieParser = require('cookie-parser');
@@ -16,10 +17,10 @@ app.use('/signup', require('./routes/signup'));
 app.use('/signin', require('./routes/signin'));
 app.use('/signout', require('./routes/signout'));
 app.use('/users', auth, require('./routes/user'));
-// app.use('/movies', auth, require('./routes/movie'));
+app.use('/movies', auth, require('./routes/movie'));
 
 app.use((err, req, res, next) => {
-  res.send(err);
+  res.send(err.message);
 });
 
 mongoose.connect('mongodb://localhost:27017/bitfilmsdb');
