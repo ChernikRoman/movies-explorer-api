@@ -4,11 +4,13 @@ const mongoose = require('mongoose');
 const cookieParser = require('cookie-parser');
 require('dotenv').config();
 const auth = require('./middlewares/authorization');
+const { requestLogger, errorLogger } = require('./middlewares/logger');
 
 const { PORT = 3000 } = process.env;
 
 const app = express();
 
+app.use(requestLogger);
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
@@ -19,6 +21,7 @@ app.use('/signout', require('./routes/signout'));
 app.use('/users', auth, require('./routes/user'));
 app.use('/movies', auth, require('./routes/movie'));
 
+app.use(errorLogger);
 app.use((err, req, res, next) => {
   res.send(err.message);
 });
