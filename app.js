@@ -3,6 +3,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const cookieParser = require('cookie-parser');
 require('dotenv').config();
+const { errors } = require('celebrate');
 const auth = require('./middlewares/authorization');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
 const corsHandler = require('./middlewares/corsHandler');
@@ -24,8 +25,9 @@ app.use('/users', auth, require('./routes/user'));
 app.use('/movies', auth, require('./routes/movie'));
 
 app.use(errorLogger);
+app.use(errors());
 app.use((err, req, res, next) => {
-  res.send(err.message);
+  res.send({ errName: err.name, errMessage: err.message });
 });
 
 mongoose.connect('mongodb://localhost:27017/bitfilmsdb');
