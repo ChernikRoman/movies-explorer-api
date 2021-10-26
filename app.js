@@ -5,6 +5,7 @@ const cookieParser = require('cookie-parser');
 require('dotenv').config();
 const auth = require('./middlewares/authorization');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
+const corsHandler = require('./middlewares/corsHandler');
 
 const { PORT = 3000 } = process.env;
 
@@ -14,6 +15,7 @@ app.use(requestLogger);
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
+app.use(corsHandler);
 
 app.use('/signup', require('./routes/signup'));
 app.use('/signin', require('./routes/signin'));
