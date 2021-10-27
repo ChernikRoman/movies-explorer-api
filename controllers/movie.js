@@ -1,4 +1,6 @@
 const Movie = require('../models/movie');
+const NotFoundError = require('../errors/notFoundError');
+const ForbiddenError = require('../errors/forbiddenError');
 
 function getMovies(req, res, next) {
   Movie.find({})
@@ -6,7 +8,7 @@ function getMovies(req, res, next) {
     .catch(next);
 }
 
-function postMovie(req, res, next) {
+function createMovie(req, res, next) {
   const {
     country,
     director,
@@ -35,14 +37,14 @@ function postMovie(req, res, next) {
     nameRU,
     nameEN,
   })
-    .then((movie) => res.status(200).send(movie))
+    .then((movie) => res.send(movie))
     .catch(next);
 }
 
 function deleteMovie(req, res, next) {
   Movie.findById(req.params.movieId)
     .orFail(() => {
-      throw new Error('Not found movie');
+      throw new NotFoundError('Not found movie');
     })
     .then((movie) => {
       if (movie.owner.toString() === req.userId) {
@@ -52,7 +54,7 @@ function deleteMovie(req, res, next) {
             next(err);
           });
       } else {
-        next({ message: 'net prav' });
+        next(new ForbiddenError('Forbidden access'));
       }
     })
     .catch(next);
@@ -60,6 +62,6 @@ function deleteMovie(req, res, next) {
 
 module.exports = {
   getMovies,
-  postMovie,
+  createMovie,
   deleteMovie,
 };

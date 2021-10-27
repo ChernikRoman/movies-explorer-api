@@ -1,3 +1,4 @@
+/* eslint-disable no-param-reassign */
 /* eslint-disable no-unused-vars */
 const express = require('express');
 const mongoose = require('mongoose');
@@ -27,7 +28,9 @@ app.use('/movies', auth, require('./routes/movie'));
 app.use(errorLogger);
 app.use(errors());
 app.use((err, req, res, next) => {
-  res.send({ errName: err.name, errMessage: err.message });
+  const handledStatusCodes = '400,401,403,404,';
+  if (!(handledStatusCodes.includes(err.statusCode))) err.statusCode = 500;
+  res.status(err.statusCode).send({ errorName: err.name, errorMessage: err.message });
 });
 
 mongoose.connect('mongodb://localhost:27017/bitfilmsdb');

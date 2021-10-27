@@ -1,6 +1,7 @@
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 const User = require('../models/user');
+const BadRequestError = require('../errors/badRequestError');
 
 const { NODE_ENV, JWT_SECRET } = process.env;
 
@@ -8,7 +9,7 @@ function login(req, res, next) {
   const { email, password } = req.body;
 
   User.findOne({ email }).select('+password')
-    .orFail(() => { throw new NotFoundError('Not Found'); })
+    .orFail(() => { throw new BadRequestError('Incorrent email or password'); })
     .then((user) => {
       bcrypt.compare(password, user.password)
         .then((matches) => {
@@ -19,7 +20,7 @@ function login(req, res, next) {
               httpOnly: true,
               sameSite: true,
             });
-            res.status(200).send({ _id: user._id, name: user.name, email: user.email });
+            res.send({ _id: user._id, name: user.name, email: user.email });
           } else {
             throw new BadRequestError('Incorrent email or password');
           }
@@ -32,7 +33,7 @@ function login(req, res, next) {
 function logout(req, res) {
   res
     .clearCookie('jwt')
-    .status(204)
+
     .send({ message: 'Выход выполнен' });
 }
 

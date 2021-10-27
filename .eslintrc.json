@@ -7,9 +7,6 @@
     "extends": [
         "airbnb-base"
     ],
-    // "parserOptions": {
-    //     "ecmaVersion": 13
-    // },
     "rules": {
       "no-underscore-dangle": "off",
       "no-shadow": "off"

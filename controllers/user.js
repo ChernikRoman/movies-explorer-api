@@ -1,5 +1,6 @@
 const passwordHashing = require('../utils/passwordHashing');
 const User = require('../models/user');
+const NotFoundError = require('../errors/notFoundError');
 
 async function createUser(req, res, next) {
   const { name, email, password } = req.body;
@@ -14,20 +15,18 @@ async function createUser(req, res, next) {
     .then((data) => {
       res.send({ name: data.name, email: data.email });
     })
-    .catch((err) => {
-      res.send(err);
-    });
+    .catch(next);
 }
 
 function getMyUserData(req, res, next) {
   User.findById(req.userId)
     .orFail(() => {
-      throw new Error('Not found');
+      throw new NotFoundError('User not found');
     })
     .then((user) => {
-      res.status(200).send(user);
+      res.send(user);
     })
-    .catch((err) => next(err));
+    .catch(next);
 }
 
 async function patchMyUserData(req, res, next) {
@@ -38,9 +37,9 @@ async function patchMyUserData(req, res, next) {
     password = await passwordHashing(req.body.password);
   }
   User.findByIdAndUpdate(req.userId, { name, email, password }, { new: true, runValidators: true }).select('+password')
-    .orFail(() => { throw new Error('Не найден'); })
+    .orFail(() => { throw new NotFoundError('User not found'); })
     .then((user) => {
-      res.status(200).send(user);
+      res.send({ name: user.name, email: user.email });
     })
     .catch(next);
 }
