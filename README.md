@@ -23,4 +23,4 @@
 - система контроля версий GitHub
 
 ## Доменное имя
-api.moredomains.nomoredomains.monster
+api.moredomains.nomoredomains.rocks
