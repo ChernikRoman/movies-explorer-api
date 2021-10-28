@@ -25,6 +25,8 @@ app.use('/signout', require('./routes/signout'));
 app.use('/users', auth, require('./routes/user'));
 app.use('/movies', auth, require('./routes/movie'));
 
+app.use(require('./controllers/incorrectEndpoint'));
+
 app.use(errorLogger);
 app.use(errors());
 app.use((err, req, res, next) => {
