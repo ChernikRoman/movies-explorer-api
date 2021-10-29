@@ -1,10 +1,13 @@
 const router = require('express').Router();
 const { Joi, celebrate } = require('celebrate');
 const { getMovies, createMovie, deleteMovie } = require('../controllers/movie');
+const { signout } = require('../controllers/signout');
+const { getMyUserData, patchMyUserData } = require('../controllers/user');
 const validateURL = require('../utils/validateURL');
 
-router.get('/', getMovies);
-router.post('/', celebrate({
+router.get('/movies', getMovies);
+
+router.post('/movies', celebrate({
   body: Joi.object().keys({
     country: Joi.string().required(),
     director: Joi.string().required(),
@@ -14,17 +17,28 @@ router.post('/', celebrate({
     image: Joi.string().required().custom(validateURL),
     trailer: Joi.string().required().custom(validateURL),
     thumbnail: Joi.string().required().custom(validateURL),
-    movieId: Joi.string(),
+    movieId: Joi.number().required(),
     nameRU: Joi.string().required(),
     nameEN: Joi.string().required(),
   }),
 }), createMovie);
-router.delete('/:movieId', celebrate({
-  body: Joi.object().keys({
-    param: Joi.object().keys({
-      movieId: Joi.string().length(24).hex(),
-    }),
+
+router.delete('/movies/:movieId', celebrate({
+  params: Joi.object().keys({
+    movieId: Joi.string().hex().length(24),
   }),
 }), deleteMovie);
+
+router.get('/signout', signout);
+
+router.get('/users/me', getMyUserData);
+
+router.patch('/users/me', celebrate({
+  body: Joi.object().keys({
+    name: Joi.string().min(2).max(30).required(),
+    email: Joi.string().email(),
+    password: Joi.string(),
+  }),
+}), patchMyUserData);
 
 module.exports = router;

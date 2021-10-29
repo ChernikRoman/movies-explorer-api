@@ -1,6 +1,7 @@
 const Movie = require('../models/movie');
 const NotFoundError = require('../errors/notFoundError');
 const ForbiddenError = require('../errors/forbiddenError');
+const BadRequestError = require('../errors/badRequestError');
 
 function getMovies(req, res, next) {
   Movie.find({})
@@ -38,7 +39,13 @@ function createMovie(req, res, next) {
     nameEN,
   })
     .then((movie) => res.send(movie))
-    .catch(next);
+    .catch((err) => {
+      if (err.name === 'ValidationError') {
+        next(new BadRequestError(`Invalid data: ${Object.keys(err.errors)}`));
+      } else {
+        res.send(err);
+      }
+    });
 }
 
 function deleteMovie(req, res, next) {
@@ -48,8 +55,8 @@ function deleteMovie(req, res, next) {
     })
     .then((movie) => {
       if (movie.owner.toString() === req.userId) {
-        Movie.findByIdAndRemove(req.params.movieId)
-          .then((movie) => res.send(movie))
+        Movie.remove(req.params.movieId)
+          .then((data) => res.send(data))
           .catch((err) => {
             next(err);
           });
@@ -57,7 +64,13 @@ function deleteMovie(req, res, next) {
         next(new ForbiddenError('Forbidden access'));
       }
     })
-    .catch(next);
+    .catch((err) => {
+      if (err.name === 'CastError') {
+        next(new BadRequestError('Invalid movieId'));
+      } else {
+        next(err);
+      }
+    });
 }
 
 module.exports = {

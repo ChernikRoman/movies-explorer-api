@@ -11,7 +11,7 @@ const movieSchema = mongoose.Schema({
   trailer: { type: String, validate: (value) => validator.isURL(value), required: true },
   thumbnail: { type: String, validate: (value) => validator.isURL(value), required: true },
   owner: { type: mongoose.Types.ObjectId, ref: 'user', required: true },
-  movieId: { type: String, required: true },
+  movieId: { type: Number, required: true },
   nameRU: { type: String, required: true },
   nameEN: { type: String, required: true },
 });

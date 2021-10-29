@@ -1,22 +1,7 @@
 const passwordHashing = require('../utils/passwordHashing');
 const User = require('../models/user');
 const NotFoundError = require('../errors/notFoundError');
-
-async function createUser(req, res, next) {
-  const { name, email, password } = req.body;
-
-  const hash = await passwordHashing(password);
-
-  User.create({
-    name,
-    email,
-    password: hash,
-  })
-    .then((data) => {
-      res.send({ name: data.name, email: data.email });
-    })
-    .catch(next);
-}
+const ConflictError = require('../errors/conflictError');
 
 function getMyUserData(req, res, next) {
   User.findById(req.userId)
@@ -41,11 +26,16 @@ async function patchMyUserData(req, res, next) {
     .then((user) => {
       res.send({ name: user.name, email: user.email });
     })
-    .catch(next);
+    .catch((err) => {
+      if (err.name === 'MongoServerError' && err.code === 11000) {
+        next(new ConflictError('Email is already in use'));
+      } else {
+        next(err);
+      }
+    });
 }
 
 module.exports = {
-  createUser,
   getMyUserData,
   patchMyUserData,
 };

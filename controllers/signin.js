@@ -5,7 +5,7 @@ const BadRequestError = require('../errors/badRequestError');
 
 const { NODE_ENV, JWT_SECRET } = process.env;
 
-function login(req, res, next) {
+function signin(req, res, next) {
   const { email, password } = req.body;
 
   User.findOne({ email }).select('+password')
@@ -30,14 +30,6 @@ function login(req, res, next) {
     .catch(next);
 }
 
-function logout(req, res) {
-  res
-    .clearCookie('jwt')
-
-    .send({ message: 'Выход выполнен' });
-}
-
 module.exports = {
-  login,
-  logout,
+  signin,
 };

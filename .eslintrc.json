@@ -8,7 +8,6 @@
         "airbnb-base"
     ],
     "rules": {
-      "no-underscore-dangle": ["error", { "allow": ["_id"]}],
-      "no-shadow": "off"
+      "no-underscore-dangle": ["error", { "allow": ["_id"]}]
     }
 }

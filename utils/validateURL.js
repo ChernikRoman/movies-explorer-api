@@ -1,13 +1,12 @@
-/* eslint-disable consistent-return */
 const validator = require('validator');
 const BadRequestError = require('../errors/badRequestError');
 
 function validateURL(link) {
   if (!validator.isURL(link)) {
-    return new BadRequestError('Invalid URL');
+    throw new BadRequestError('Invalid URLssss');
+  } else {
+    return link;
   }
-
-  return link;
 }
 
 module.exports = validateURL;
