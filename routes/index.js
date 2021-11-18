@@ -1,7 +1,6 @@
 const router = require('express').Router();
 const { Joi, celebrate } = require('celebrate');
 const { getMovies, createMovie, deleteMovie } = require('../controllers/movie');
-const { signout } = require('../controllers/signout');
 const { getMyUserData, patchMyUserData } = require('../controllers/user');
 const validateURL = require('../utils/validateURL');
 
@@ -28,8 +27,6 @@ router.delete('/movies/:movieId', celebrate({
     movieId: Joi.string().hex().length(24),
   }),
 }), deleteMovie);
-
-router.get('/signout', signout);
 
 router.get('/users/me', getMyUserData);
 
