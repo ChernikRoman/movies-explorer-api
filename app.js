@@ -19,6 +19,7 @@ app.use(corsHandler);
 
 app.use(require('./routes/signup'));
 app.use(require('./routes/signin'));
+app.use(require('./routes/signout'));
 
 app.use(auth);
 
