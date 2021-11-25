@@ -49,13 +49,14 @@ function createMovie(req, res, next) {
 }
 
 function deleteMovie(req, res, next) {
+  console.log(req.params.movieId);
   Movie.findById(req.params.movieId)
     .orFail(() => {
       throw new NotFoundError('Not found movie');
     })
     .then((movie) => {
       if (movie.owner.toString() === req.userId) {
-        Movie.remove(req.params.movieId)
+        Movie.findByIdAndDelete(req.params.movieId)
           .then((data) => res.send(data))
           .catch((err) => {
             next(err);
