@@ -55,7 +55,7 @@ function deleteMovie(req, res, next) {
     })
     .then((movie) => {
       if (movie.owner.toString() === req.userId) {
-        Movie.remove(req.params.movieId)
+        Movie.findByIdAndDelete(req.params.movieId)
           .then((data) => res.send(data))
           .catch((err) => {
             next(err);
