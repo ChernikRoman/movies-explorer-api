@@ -1,6 +1,7 @@
 // eslint-disable-next-line consistent-return
 module.exports = (req, res, next) => {
   const allowedOrigins = [
+    'http://moredomains.nomoredomains.rocks/',
     'http://localhost:3001',
   ];
   const allowedHeaders = req.headers['access-control-request-headers'];
